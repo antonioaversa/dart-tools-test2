@@ -24,6 +24,8 @@ jobs:
     services:
       sonarqube:
        image: sonarqube:10.6.0-developer
+       ports:
+         - 9000:9000 
        volumes:
          - sonarqube_data:/opt/sonarqube/data
          - sonarqube_logs:/opt/sonarqube/logs
