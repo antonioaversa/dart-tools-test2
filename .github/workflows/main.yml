@@ -23,9 +23,9 @@ jobs:
     runs-on: ubuntu-latest
     services:
       sonarqube:
-       image: sonarqube:10.6.0-developer
+       image: sonarqube:10.7.0-developer
        ports:
-         - 9000:9000 
+         - 9000:9000
        volumes:
          - sonarqube_data:/opt/sonarqube/data
          - sonarqube_logs:/opt/sonarqube/logs
@@ -45,7 +45,7 @@ jobs:
     - name: Warning Test Scan
       uses: sonarsource/sonarqube-scan-action@antonio/add-warning-docker-removal
       env:
-        SONAR_HOST_URL: http://localhost:9000
+        SONAR_HOST_URL: http://sonarqube:9000
       with:
         args: -Dsonar.projectKey=test-project -Dsonar.login=admin -Dsonar.password=admin --debug
 
