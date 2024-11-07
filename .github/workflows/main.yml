@@ -18,3 +18,32 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  sonarqube-10_7_0-developer:
+    runs-on: ubuntu-latest
+    services:
+      sonarqube:
+       image: sonarqube:10.6.0-developer
+       volumes:
+         - sonarqube_data:/opt/sonarqube/data
+         - sonarqube_logs:/opt/sonarqube/logs
+         - sonarqube_extensions:/opt/sonarqube/extensions
+       options: >-
+         --health-cmd "grep -Fq \"SonarQube is operational\" /opt/sonarqube/logs/sonar.log"
+         --health-interval 10s
+         --health-timeout 5s
+         --health-retries 10
+          
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        # Disabling shallow clones is recommended for improving the relevancy of reporting
+        fetch-depth: 0
+
+    - name: Warning Test Scan
+      uses: sonarsource/sonarqube-scan-action@antonio/add-warning-docker-removal
+      env:
+        SONAR_HOST_URL: http://localhost:9000
+      with:
+        args: -Dsonar.projectKey=test-project -Dsonar.login=admin -Dsonar.password=admin --debug
+
