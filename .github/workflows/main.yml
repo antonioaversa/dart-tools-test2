@@ -48,4 +48,3 @@ jobs:
         SONAR_HOST_URL: http://sonarqube:9000
       with:
         args: -Dsonar.projectKey=test-project -Dsonar.login=admin -Dsonar.password=admin --debug
-
