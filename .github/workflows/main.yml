@@ -7,7 +7,7 @@ on:
     types: [opened, synchronize, reopened]
 jobs:
   sonarcloud-no-args:
-    name: SonarCloud
+    name: SonarCloud only env vars
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -19,7 +19,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   sonarcloud-projectBaseDir:
-    name: SonarCloud
+    name: SonarCloud projectBaseDir input parameter
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -33,7 +33,7 @@ jobs:
         with:
           projectBaseDir: js-project
   sonarcloud-args:
-    name: SonarCloud
+    name: SonarCloud args input parameter
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -48,7 +48,7 @@ jobs:
           projectBaseDir: js-project
           args: -Dsonar.verbose=true
   sonarcloud-scannerVersion:
-    name: SonarCloud
+    name: SonarCloud scannerVersion input parameter
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -63,7 +63,7 @@ jobs:
           projectBaseDir: js-project
           scannerVersion: 6.2.0.4584
   sonarcloud-scannerBinariesUrl:
-    name: SonarCloud
+    name: SonarCloud scannerBinariesUrl input parameter
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
