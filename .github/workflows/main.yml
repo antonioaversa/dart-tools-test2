@@ -6,7 +6,7 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
-  sonarcloud:
+  sonarcloud-no-args:
     name: SonarCloud
     runs-on: ubuntu-latest
     steps:
@@ -14,39 +14,66 @@ jobs:
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       - name: SonarCloud Scan
-        uses: antonioaversa/sonarcloud-github-action@master
-        with:
-          args: --debug
+        uses: SonarSource/sonarcloud-github-action@antonio/SCSCANGHA-25-28-remove-docker-and-rebranding
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-  sonarqube-10_7_0-developer:
+  sonarcloud-projectBaseDir:
+    name: SonarCloud
     runs-on: ubuntu-latest
-    services:
-      sonarqube:
-       image: sonarqube:10.7.0-developer
-       ports:
-         - 9000:9000
-       volumes:
-         - sonarqube_data:/opt/sonarqube/data
-         - sonarqube_logs:/opt/sonarqube/logs
-         - sonarqube_extensions:/opt/sonarqube/extensions
-       options: >-
-         --health-cmd "grep -Fq \"SonarQube is operational\" /opt/sonarqube/logs/sonar.log"
-         --health-interval 10s
-         --health-timeout 5s
-         --health-retries 10
-
     steps:
-    - uses: actions/checkout@v4
-      with:
-        # Disabling shallow clones is recommended for improving the relevancy of reporting
-        fetch-depth: 0
-
-    - name: Warning Test Scan
-      uses: sonarsource/sonarqube-scan-action@antonio/add-warning-docker-removal
-      env:
-        SONAR_HOST_URL: http://sonarqube:9000
-      with:
-        args: -Dsonar.projectKey=test-project -Dsonar.login=admin -Dsonar.password=admin --debug
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@antonio/SCSCANGHA-25-28-remove-docker-and-rebranding
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectBaseDir: js-project
+  sonarcloud-args:
+    name: SonarCloud
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@antonio/SCSCANGHA-25-28-remove-docker-and-rebranding
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectBaseDir: js-project
+          args: -Dsonar.verbose=true
+  sonarcloud-scannerVersion:
+    name: SonarCloud
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@antonio/SCSCANGHA-25-28-remove-docker-and-rebranding
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectBaseDir: js-project
+          scannerVersion: 6.2.0.4584
+  sonarcloud-scannerBinariesUrl:
+    name: SonarCloud
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@antonio/SCSCANGHA-25-28-remove-docker-and-rebranding
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectBaseDir: js-project
+          scannerBinariesUrl: https://github.com/antonioaversa/dart-tools-test1/raw/refs/heads/main/binaries
