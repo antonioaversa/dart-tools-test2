@@ -1,0 +1,15 @@
+name: Build
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  other-action-from-another-repo-test:
+    name: Test calling non-default action from another repo
+    runs-on: ubuntu-latest
+    steps:
+      - uses: antonioaversa/sonarqube-scan-action/other_action@master
+        with:
+          message: "The sum of derivatives is the derivate of the sum"
